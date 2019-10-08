@@ -2,7 +2,7 @@
 
 Simple chat app using an angular 8 app with azure signalr service and azure functions.
 
-DEMO: WIP
+DEMO: https://angular-signalr.jpcloud.tk/
 
 ## Azure Functions
 
