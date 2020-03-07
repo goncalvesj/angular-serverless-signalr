@@ -11,6 +11,7 @@ variables:
   dockerTag: $(date '+%Y%m%d')
   Version.MajorMinor: 1.0
   Version.Revision: $[counter(variables['Version.MajorMinor'], 0)]
+  MyRunNumber: '1.0.0-CI-$(Date:yyyyMMdd).$(Rev:.r)'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -19,7 +20,7 @@ steps:
   - bash: | 
       echo $(dockerTag).$(Version.Revision)
       echo $(Build.BuildId)
-      echo $(Date:yyyyMMdd)$(Rev:.r)
+      echo $(MyRunNumber)
       echo $(Version.Revision)
   - task: Docker@2
     displayName: build
