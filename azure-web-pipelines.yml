@@ -7,7 +7,8 @@ trigger:
       - SignalR-Web/*
       - azure-web-pipelines.yml
 
-#$(ContainerRegistry)
+variables:
+  dockerTag: $(Date:yyyyMMdd)
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -20,7 +21,7 @@ steps:
       repository: 'goncalvesj/signalr-web'
       command: build
       Dockerfile: '**/Dockerfile'
-      tags: '$(Date:yyyyMMdd)'
+      tags: $(dockerTag)
 
   # - task: Docker@1
   #   displayName: 'Build an image'
