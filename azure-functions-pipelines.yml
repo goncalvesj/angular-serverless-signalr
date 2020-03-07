@@ -1,0 +1,23 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - SignalR.Functions/*
+      - azure-functions-pipelines.yml
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'Build project copy'
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: '**/*.csproj'
+      arguments: '--output publish_output --configuration Release'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
