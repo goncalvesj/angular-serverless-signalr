@@ -17,7 +17,7 @@ pool:
 
 steps:
   - bash: | 
-      echo $(dockerTag)
+      echo $(dockerTag).$(Version.Revision)
       echo $(Build.BuildId)
       echo $(rev:.r)
       echo $(Version.Revision)
@@ -28,7 +28,7 @@ steps:
       repository: 'goncalvesj/signalr-web'
       command: build
       Dockerfile: '**/Dockerfile'
-      tags: $(rev:.r)
+      tags: $(dockerTag)
 
   # - task: Docker@1
   #   displayName: 'Build an image'
