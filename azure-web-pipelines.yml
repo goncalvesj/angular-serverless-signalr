@@ -8,7 +8,7 @@ trigger:
       - azure-web-pipelines.yml
 
 variables:
-  dockerTag: $(Date:yyyyMMdd)
+  dockerTag: $(date '+%d/%m/%Y %H:%M:%S')
 
 pool:
   vmImage: 'ubuntu-latest'
