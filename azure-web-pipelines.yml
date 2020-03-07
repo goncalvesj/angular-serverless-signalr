@@ -29,7 +29,7 @@ steps:
       repository: 'goncalvesj/signalr-web'
       command: build
       Dockerfile: '**/Dockerfile'
-      tags: '$(dockerTag).$(Version.Revision)'
+      tags: $(Build.BuildNumber)
 
   # - task: Docker@1
   #   displayName: 'Build an image'
