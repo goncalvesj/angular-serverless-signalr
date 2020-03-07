@@ -19,7 +19,7 @@ steps:
   - bash: | 
       echo $(dockerTag).$(Version.Revision)
       echo $(Build.BuildId)
-      echo $(rev:.r)
+      echo $(Date:yyyyMMdd)$(Rev:.r)
       echo $(Version.Revision)
   - task: Docker@2
     displayName: build
