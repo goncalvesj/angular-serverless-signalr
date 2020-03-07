@@ -20,9 +20,15 @@ steps:
       repository: 'goncalvesj/signalr-web'
       command: build
 
-  - task: Docker@1
-    displayName: 'Build an image'
+  # - task: Docker@1
+  #   displayName: 'Build an image'
+  #   inputs:
+  #     azureSubscriptionEndpoint: $(AzureSubscription)
+  #     azureContainerRegistry: $(ContainerRegistry)
+  #     imageName: 'goncalvesj/signalr-web:$(Build.BuildId)'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Charts'
     inputs:
-      azureSubscriptionEndpoint: $(AzureSubscription)
-      azureContainerRegistry: $(ContainerRegistry)      
-      imageName: 'goncalvesj/signalr-web:$(Build.BuildId)'
+      targetPath: 'SignalR-Web/helm'
+      artifact: 'charts'
