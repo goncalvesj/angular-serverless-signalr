@@ -8,7 +8,7 @@ trigger:
       - azure-web-pipelines.yml
 
 variables:
-  dockerTag: $(date '+%Y%m%d')
+  dockerTag: $(date '+%Y%m%d').$(Version.Revision)
   Version.MajorMinor: 1.0
   Version.Revision: $[counter(variables['Version.MajorMinor'], 0)]
   MyRunNumber: '1.0.0-CI-$(Date:yyyyMMdd).$(Rev:.r)'
@@ -18,7 +18,7 @@ pool:
 
 steps:
   - bash: | 
-      echo $(dockerTag).$(Version.Revision)
+      echo $(dockerTag)
       echo $(Build.BuildId)
       echo $(MyRunNumber)
       echo $(Version.Revision)
