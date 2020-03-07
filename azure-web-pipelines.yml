@@ -19,7 +19,8 @@ steps:
       containerRegistry: 'Docker Hub - Goncalvesj'
       repository: 'goncalvesj/signalr-web'
       command: build
-      tags: $(Date:yyyyMMdd)$(Rev:.r)
+      Dockerfile: '**/Dockerfile'
+      tags: '$(Date:yyyyMMdd)$(Rev:.r)'
 
   # - task: Docker@1
   #   displayName: 'Build an image'
