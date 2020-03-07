@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - SignalR-Web/*
+      - web-pipeline.yml
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: Docker@2
+    displayName: build
+    inputs:
+      containerRegistry: 'Docker Hub - Goncalvesj'
+      repository: 'goncalvesj/signalr-web'
+      command: build
