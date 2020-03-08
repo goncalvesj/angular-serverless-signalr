@@ -7,28 +7,82 @@ trigger:
       - SignalR-Web/*
       - azure-web-pipelines.yml
 
-pool:
-  vmImage: 'ubuntu-latest'
+stages:
+- stage: Build
+  displayName: 'Build'
+  jobs:
+  - job: Build
+    displayName: 'Build'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+        - task: Docker@2
+          displayName: 'Docker Build'
+          inputs:
+            containerRegistry: 'Docker Hub - Goncalvesj'
+            repository: 'goncalvesj/signalr-web'
+            command: build
+            Dockerfile: '**/Dockerfile'
+            tags: $(Build.BuildNumber)
 
-steps:
-  - task: Docker@2
-    displayName: build
-    inputs:
-      containerRegistry: 'Docker Hub - Goncalvesj'
-      repository: 'goncalvesj/signalr-web'
-      command: build
-      Dockerfile: '**/Dockerfile'
-      tags: $(Build.BuildNumber)
+        - task: Docker@2
+          displayName: 'Docker Push'
+          inputs:
+            containerRegistry: 'Docker Hub - Goncalvesj'
+            repository: 'goncalvesj/signalr-web'
+            command: push
+            Dockerfile: '**/Dockerfile'
+            tags: $(Build.BuildNumber)
+    # - task: Docker@1
+    #   displayName: 'Build an image'
+    #   inputs:
+    #     azureSubscriptionEndpoint: $(AzureSubscription)
+    #     azureContainerRegistry: $(ContainerRegistry)
+    #     imageName: 'goncalvesj/signalr-web:$(Build.BuildId)'
 
-  # - task: Docker@1
-  #   displayName: 'Build an image'
-  #   inputs:
-  #     azureSubscriptionEndpoint: $(AzureSubscription)
-  #     azureContainerRegistry: $(ContainerRegistry)
-  #     imageName: 'goncalvesj/signalr-web:$(Build.BuildId)'
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish Charts'
+          inputs:
+            targetPath: 'SignalR-Web/helm'
+            artifact: 'charts'
 
-  - task: PublishPipelineArtifact@1
-    displayName: 'Publish Charts'
-    inputs:
-      targetPath: 'SignalR-Web/helm'
-      artifact: 'charts'
+- stage: Deploy
+  displayName: 'Deploy'
+  jobs:
+  - deployment: Deploy
+    displayName: 'Deploy'
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: 'V1-JoaoGoncalves-AKS'
+    strategy:      
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
+            inputs:
+              artifactName: charts
+
+
+# stages:
+#   - stage: Build
+#     jobs:    
+#       displayName: 'Deploy Helm Chart'
+#       pool:
+#         vmImage: ${{ parameters.vmImage }}
+      
+
+  # jobs:  
+  #   - deployment: ${{ parameters.name }}
+  #     displayName: 'Deploy Helm Chart'
+  #     pool:
+  #       vmImage: ${{ parameters.vmImage }}
+  #     environment: 'Development - Angular SignalR'
+  #     strategy:      
+  #       runOnce:
+  #         deploy:
+  #           steps:
+  #           - task: DownloadPipelineArtifact@2
+  #             displayName: 'Download Pipeline Artifact'
+  #             inputs:
+  #               artifactName: charts
