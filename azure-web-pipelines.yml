@@ -71,8 +71,8 @@ stages:
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
-              namespace: 'default'
               command: 'init'
+          
           # - task: HelmDeploy@0
           #   displayName: 'helm upgrade'
           #   inputs:
@@ -86,6 +86,7 @@ stages:
           #     valueFile: '$(Pipeline.Workspace)/charts/${{ parameters.imageName }}/values.yaml'
           #     arguments: '--set image.tag=$(Build.BuildId) --set image.repository=${{ parameters.repositoryName }}/${{ parameters.imageName }}'
           - task: HelmDeploy@0
+            displayName: 'Install'
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
