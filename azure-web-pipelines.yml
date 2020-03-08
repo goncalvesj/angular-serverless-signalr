@@ -95,6 +95,6 @@ stages:
               command: 'upgrade'
               chartType: 'FilePath'
               chartPath: '$(Pipeline.Workspace)/charts/signalr-web'
-              releaseName: 'sw-0'
+              releaseName: sw-0
               overrideValues: '--set image.tag=$(Build.BuildNumber) --set image.repository=goncalvesj/signalr-web'
               valueFile: '$(Pipeline.Workspace)/charts/signalr-web/values.yaml'
