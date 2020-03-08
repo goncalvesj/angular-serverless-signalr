@@ -73,6 +73,7 @@ stages:
               kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
               command: 'init'
               upgradeTiller: false
+              waitForExecution: false
           # - task: HelmDeploy@0
           #   displayName: 'helm upgrade'
           #   inputs:
