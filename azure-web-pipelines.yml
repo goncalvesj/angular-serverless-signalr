@@ -62,27 +62,37 @@ stages:
             displayName: 'Download Pipeline Artifact'
             inputs:
               artifactName: charts
-
-
-# stages:
-#   - stage: Build
-#     jobs:    
-#       displayName: 'Deploy Helm Chart'
-#       pool:
-#         vmImage: ${{ parameters.vmImage }}
-      
-
-  # jobs:  
-  #   - deployment: ${{ parameters.name }}
-  #     displayName: 'Deploy Helm Chart'
-  #     pool:
-  #       vmImage: ${{ parameters.vmImage }}
-  #     environment: 'Development - Angular SignalR'
-  #     strategy:      
-  #       runOnce:
-  #         deploy:
-  #           steps:
-  #           - task: DownloadPipelineArtifact@2
-  #             displayName: 'Download Pipeline Artifact'
-  #             inputs:
-  #               artifactName: charts
+          - task: HelmInstaller@1
+            displayName: 'Install Helm'
+            inputs:
+              helmVersionToInstall: 'latest'
+          - task: HelmDeploy@0
+            displayName: 'Init Helm'
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
+              namespace: 'default'
+              command: 'init'
+          # - task: HelmDeploy@0
+          #   displayName: 'helm upgrade'
+          #   inputs:
+          #     azureSubscription: $(subscription)
+          #     azureResourceGroup: $(resourceGroup)
+          #     kubernetesCluster: $(kubernetesCluster)
+          #     command: upgrade
+          #     chartType: FilePath
+          #     chartPath: '$(Pipeline.Workspace)/charts/${{ parameters.imageName }}'
+          #     releaseName: ${{ parameters.releaseName }}
+          #     valueFile: '$(Pipeline.Workspace)/charts/${{ parameters.imageName }}/values.yaml'
+          #     arguments: '--set image.tag=$(Build.BuildId) --set image.repository=${{ parameters.repositoryName }}/${{ parameters.imageName }}'
+          - task: HelmDeploy@0
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
+              namespace: 'default'
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: '$(Pipeline.Workspace)/charts/signalr-web'
+              releaseName: 'sw-0'
+              overrideValues: '--set image.tag=$(Build.BuildNumber) --set image.repository=goncalvesj/signalr-web'
+              valueFile: '$(Pipeline.Workspace)/charts/signalr-web/values.yaml'
