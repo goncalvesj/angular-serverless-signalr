@@ -16,23 +16,23 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-        - task: Docker@2
-          displayName: 'Docker Build'
-          inputs:
-            containerRegistry: 'Docker Hub - Goncalvesj'
-            repository: 'goncalvesj/signalr-web'
-            command: build
-            Dockerfile: '**/Dockerfile'
-            tags: $(Build.BuildNumber)
+        # - task: Docker@2
+        #   displayName: 'Docker Build'
+        #   inputs:
+        #     containerRegistry: 'Docker Hub - Goncalvesj'
+        #     repository: 'goncalvesj/signalr-web'
+        #     command: build
+        #     Dockerfile: '**/Dockerfile'
+        #     tags: $(Build.BuildNumber)
 
-        - task: Docker@2
-          displayName: 'Docker Push'
-          inputs:
-            containerRegistry: 'Docker Hub - Goncalvesj'
-            repository: 'goncalvesj/signalr-web'
-            command: push
-            Dockerfile: '**/Dockerfile'
-            tags: $(Build.BuildNumber)
+        # - task: Docker@2
+        #   displayName: 'Docker Push'
+        #   inputs:
+        #     containerRegistry: 'Docker Hub - Goncalvesj'
+        #     repository: 'goncalvesj/signalr-web'
+        #     command: push
+        #     Dockerfile: '**/Dockerfile'
+        #     tags: $(Build.BuildNumber)
     # - task: Docker@1
     #   displayName: 'Build an image'
     #   inputs:
