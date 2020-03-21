@@ -89,34 +89,35 @@ stages:
           #     releaseName: ${{ parameters.releaseName }}
           #     valueFile: '$(Pipeline.Workspace)/charts/${{ parameters.imageName }}/values.yaml'
           #     arguments: '--set image.tag=$(Build.BuildId) --set image.repository=${{ parameters.repositoryName }}/${{ parameters.imageName }}'
-          # - task: HelmDeploy@0
-          #   displayName: 'Install'
-          #   inputs:
-          #     connectionType: 'Kubernetes Service Connection'
-          #     kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
-          #     namespace: 'default'
-          #     command: 'upgrade'
-          #     chartType: 'FilePath'
-          #     chartPath: '$(Pipeline.Workspace)/charts/signalr-web'
-          #     releaseName: sw-0
-          #     overrideValues: '--set image.tag=$(Build.BuildNumber) --set image.repository=goncalvesj/signalr-web'
-          #     valueFile: '$(Pipeline.Workspace)/charts/signalr-web/values.yaml'
-          - task: Kubernetes@1
+          - task: HelmDeploy@0
+            displayName: 'Install'
             inputs:
               connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
-              command: 'version'
-              secretType: 'dockerRegistry'
-              containerRegistryType: 'Azure Container Registry'
-          - task: Kubernetes@1
-            inputs:
-              connectionType: 'Azure Resource Manager'
-              azureSubscriptionEndpoint: 'Visual Studio Enterprise – MPN'
-              azureResourceGroup: 'V1-JoaoGoncalves-AKS'
-              kubernetesCluster: 'V1-JoaoGoncalves-AKS'
-              command: 'version'
-              secretType: 'dockerRegistry'
-              containerRegistryType: 'Azure Container Registry'
+              kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
+              namespace: 'default'
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: '$(Pipeline.Workspace)/charts/signalr-web'
+              releaseName: sw-0
+              overrideValues: '--set image.tag=$(Build.BuildNumber) --set image.repository=goncalvesj/signalr-web'
+              valueFile: '$(Pipeline.Workspace)/charts/signalr-web/values.yaml'
+              failOnStderr: false
+          # - task: Kubernetes@1
+          #   inputs:
+          #     connectionType: 'Kubernetes Service Connection'
+          #     kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
+          #     command: 'version'
+          #     secretType: 'dockerRegistry'
+          #     containerRegistryType: 'Azure Container Registry'
+          # - task: Kubernetes@1
+          #   inputs:
+          #     connectionType: 'Azure Resource Manager'
+          #     azureSubscriptionEndpoint: 'Visual Studio Enterprise – MPN'
+          #     azureResourceGroup: 'V1-JoaoGoncalves-AKS'
+          #     kubernetesCluster: 'V1-JoaoGoncalves-AKS'
+          #     command: 'version'
+          #     secretType: 'dockerRegistry'
+          #     containerRegistryType: 'Azure Container Registry'
           - task: Bash@3
             inputs:
               targetType: 'inline'
