@@ -48,7 +48,7 @@ stages:
         - task: PublishPipelineArtifact@1
           displayName: 'Publish Charts'
           inputs:
-            targetPath: 'SignalR-Web/helm'
+            targetPath: 'Helm/signalr-web'
             artifact: 'charts'
 
 - stage: Deploy
@@ -70,13 +70,13 @@ stages:
           - task: HelmInstaller@1
             displayName: 'Install Helm'
             inputs:
-              helmVersionToInstall: 'v2'
-          - task: HelmDeploy@0
-            displayName: 'Init Helm'
-            inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
-              command: 'init'
+              helmVersionToInstall: 'latest'
+          # - task: HelmDeploy@0
+          #   displayName: 'Init Helm'
+          #   inputs:
+          #     connectionType: 'Kubernetes Service Connection'
+          #     kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
+          #     command: 'init'
           # - task: HelmDeploy@0
           #   displayName: 'helm upgrade'
           #   inputs:

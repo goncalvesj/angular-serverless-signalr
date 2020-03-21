@@ -35,11 +35,29 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "signalr-web.labels" -}}
-app.kubernetes.io/name: {{ include "signalr-web.name" . }}
 helm.sh/chart: {{ include "signalr-web.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+{{ include "signalr-web.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Selector labels
+*/}}
+{{- define "signalr-web.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "signalr-web.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "signalr-web.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "signalr-web.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
