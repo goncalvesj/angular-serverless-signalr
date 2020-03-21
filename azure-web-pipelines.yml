@@ -101,6 +101,13 @@ stages:
           #     releaseName: sw-0
           #     overrideValues: '--set image.tag=$(Build.BuildNumber) --set image.repository=goncalvesj/signalr-web'
           #     valueFile: '$(Pipeline.Workspace)/charts/signalr-web/values.yaml'
+          - task: Kubernetes@1
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
+              command: 'version'
+              secretType: 'dockerRegistry'
+              containerRegistryType: 'Azure Container Registry'
           - task: Bash@3
             inputs:
               targetType: 'inline'
