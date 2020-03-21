@@ -127,5 +127,5 @@ stages:
           - task: Bash@3
             inputs:
               targetType: 'inline'
-              script: 'ls -R'
+              script: 'helm upgrade sw-0 /charts --set image.repository=test --set image.tag=$(Build.BuildNumber) --dry-run'
               workingDirectory: $(Pipeline.Workspace)
