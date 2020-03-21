@@ -128,3 +128,4 @@ stages:
             inputs:
               targetType: 'inline'
               script: 'helm upgrade sw-0 $(Pipeline.Workspace)/charts/signalr-web --set image.repository=test --set image.tag=$(Build.BuildNumber) --dry-run'
+              workingDirectory: $(Pipeline.Workspace)
