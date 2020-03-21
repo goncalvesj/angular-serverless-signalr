@@ -108,6 +108,15 @@ stages:
               command: 'version'
               secretType: 'dockerRegistry'
               containerRegistryType: 'Azure Container Registry'
+          - task: Kubernetes@1
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscriptionEndpoint: 'Visual Studio Enterprise – MPN'
+              azureResourceGroup: 'V1-JoaoGoncalves-AKS'
+              kubernetesCluster: 'V1-JoaoGoncalves-AKS'
+              command: 'version'
+              secretType: 'dockerRegistry'
+              containerRegistryType: 'Azure Container Registry'
           - task: Bash@3
             inputs:
               targetType: 'inline'
