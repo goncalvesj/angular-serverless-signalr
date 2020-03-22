@@ -59,6 +59,7 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     environment: 'V1-JoaoGoncalves-AKS'
+
     strategy:      
       runOnce:
         deploy:
@@ -104,6 +105,7 @@ stages:
           #     failOnStderr: false
               
           - task: Kubernetes@1
+            displayName: 'AKS Login'
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
@@ -125,7 +127,12 @@ stages:
           #     secretType: 'dockerRegistry'
           #     containerRegistryType: 'Azure Container Registry'
           - task: Bash@3
+            displayName: 'Helm Package and Upgrade'
             inputs:
               targetType: 'inline'
-              script: 'helm upgrade sw-0 ./charts --set image.repository=test --set image.tag=$(Build.BuildNumber) --dry-run'
+              script: |
+                helm package ./charts --app-version $(Build.BuildNumber)
+                helmReleaseName="sw-0"
+                packageFile=$(find . -name "*.tgz")
+                helm upgrade $helmReleaseName $packageFile --dry-run
               workingDirectory: $(Pipeline.Workspace)
