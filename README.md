@@ -53,7 +53,7 @@ Update env.js file with the API URL.
 
 ### Deploy
 
-See build-deploy.sh
+See pipelines ``yaml`` files.
 
 - Build and Pushes docker images
-- Generates Helm charts and pushes to kubernetes
+- Generates Helm charts and pushes to AKS
