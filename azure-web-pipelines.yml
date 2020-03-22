@@ -21,30 +21,29 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-        # - task: Docker@2
-        #   displayName: 'Docker Build'
-        #   inputs:
-        #     containerRegistry: 'Docker Hub - Goncalvesj'
-        #     repository: 'goncalvesj/signalr-web'
-        #     command: build
-        #     Dockerfile: '**/Dockerfile'
-        #     tags: $(Build.BuildNumber)
+        - task: Docker@2
+          displayName: 'Docker Build'
+          inputs:
+            containerRegistry: 'Docker Hub - Goncalvesj'
+            repository: 'goncalvesj/signalr-web'
+            command: build
+            Dockerfile: '**/Dockerfile'
+            tags: $(Build.BuildNumber)
 
-        # - task: Docker@2
-        #   displayName: 'Docker Push'
-        #   inputs:
-        #     containerRegistry: 'Docker Hub - Goncalvesj'
-        #     repository: 'goncalvesj/signalr-web'
-        #     command: push
-        #     Dockerfile: '**/Dockerfile'
-        #     tags: $(Build.BuildNumber)
-    # - task: Docker@1
-    #   displayName: 'Build an image'
-    #   inputs:
-    #     azureSubscriptionEndpoint: $(AzureSubscription)
-    #     azureContainerRegistry: $(ContainerRegistry)
-    #     imageName: 'goncalvesj/signalr-web:$(Build.BuildId)'
-
+        - task: Docker@2
+          displayName: 'Docker Push'
+          inputs:
+            containerRegistry: 'Docker Hub - Goncalvesj'
+            repository: 'goncalvesj/signalr-web'
+            command: push
+            Dockerfile: '**/Dockerfile'
+            tags: $(Build.BuildNumber)
+      # - task: Docker@1
+      #   displayName: 'Build an image'
+      #   inputs:
+      #     azureSubscriptionEndpoint: $(AzureSubscription)
+      #     azureContainerRegistry: $(ContainerRegistry)
+      #     imageName: 'goncalvesj/signalr-web:$(Build.BuildId)'
         - task: PublishPipelineArtifact@1
           displayName: 'Publish Charts'
           inputs:
@@ -72,60 +71,12 @@ stages:
             displayName: 'Install Helm'
             inputs:
               helmVersionToInstall: 'latest'
-          # - task: HelmDeploy@0
-          #   displayName: 'Init Helm'
-          #   inputs:
-          #     connectionType: 'Kubernetes Service Connection'
-          #     kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
-          #     command: 'init'
-          # - task: HelmDeploy@0
-          #   displayName: 'helm upgrade'
-          #   inputs:
-          #     azureSubscription: $(subscription)
-          #     azureResourceGroup: $(resourceGroup)
-          #     kubernetesCluster: $(kubernetesCluster)
-          #     command: upgrade
-          #     chartType: FilePath
-          #     chartPath: '$(Pipeline.Workspace)/charts/${{ parameters.imageName }}'
-          #     releaseName: ${{ parameters.releaseName }}
-          #     valueFile: '$(Pipeline.Workspace)/charts/${{ parameters.imageName }}/values.yaml'
-          #     arguments: '--set image.tag=$(Build.BuildId) --set image.repository=${{ parameters.repositoryName }}/${{ parameters.imageName }}'
-          # - task: HelmDeploy@0
-          #   displayName: 'Install'
-          #   inputs:
-          #     connectionType: 'Kubernetes Service Connection'
-          #     kubernetesServiceConnection: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
-          #     namespace: 'default'
-          #     command: 'upgrade'
-          #     chartType: 'FilePath'
-          #     chartPath: '$(Pipeline.Workspace)/charts/signalr-web'
-          #     releaseName: sw-0
-          #     overrideValues: '--set image.tag=$(Build.BuildNumber) --set image.repository=goncalvesj/signalr-web'
-          #     valueFile: '$(Pipeline.Workspace)/charts/signalr-web/values.yaml'
-          #     failOnStderr: false
-              
           - task: Kubernetes@1
             displayName: 'AKS Login'
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
               command: 'login'
-          # - task: Kubernetes@1
-          #   inputs:
-          #     connectionType: 'Kubernetes Service Connection'
-          #     kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
-          #     command: 'version'
-          #     secretType: 'dockerRegistry'
-          #     containerRegistryType: 'Azure Container Registry'
-          # - task: Kubernetes@1
-          #   inputs:
-          #     connectionType: 'Azure Resource Manager'
-          #     azureSubscriptionEndpoint: 'Visual Studio Enterprise – MPN'
-          #     azureResourceGroup: 'V1-JoaoGoncalves-AKS'
-          #     kubernetesCluster: 'V1-JoaoGoncalves-AKS'
-          #     command: 'version'
-          #     secretType: 'dockerRegistry'
-          #     containerRegistryType: 'Azure Container Registry'
           - task: Bash@3
             displayName: 'Helm Package and Upgrade'
             inputs:
@@ -134,5 +85,5 @@ stages:
                 helm package ./charts --app-version $(Build.BuildNumber)
                 helmReleaseName="sw-0"
                 packageFile=$(find . -name "*.tgz")
-                helm upgrade $helmReleaseName $packageFile --dry-run
+                helm upgrade $helmReleaseName $packageFile
               workingDirectory: $(Pipeline.Workspace)
