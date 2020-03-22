@@ -17,7 +17,10 @@ steps:
       command: publish
       publishWebProjects: false
       projects: '**/*.csproj'
-      arguments: '--output publish_output --configuration Release'
+      arguments: '--output $(Build.ArtifactStagingDirectory) --configuration Release'
 
   - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: drop'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
