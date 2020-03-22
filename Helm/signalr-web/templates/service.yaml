@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "signalr-web.fullname" . }}
   labels:
-{{ include "signalr-web.labels" . | indent 4 }}
+    {{- include "signalr-web.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,5 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "signalr-web.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "signalr-web.selectorLabels" . | nindent 4 }}

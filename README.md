@@ -7,11 +7,13 @@ DEMO: https://angular-signalr.jpcloud.tk/
 ## Azure Functions
 
 Contains 2 functions
+
 - Negotiate (initiates the signalr connection)
 - Send Message (sends message to an user)
 
 Create local.settings.json file with the below settings and start the function.
-```
+
+```JSON
 {
   "IsEncrypted": false,
   "Values": {
@@ -33,7 +35,7 @@ The web client used to initiate the chat.
 
 Update env.js file with the API URL.
 
-```
+```JS
 (function(window) {
   window.__env = window.__env || {};
 
@@ -44,14 +46,14 @@ Update env.js file with the API URL.
 - Run ```npm i | ng serve``` in VS Code
 - Open browser and test
 
-
 ### Docker commands for Angular App
-- docker build -t <repo/imagename>:<tag> .
-- docker run --rm -d -p 8080:80 --name <name> <repo/imagename>:<tag>
+
+- ``docker build -t <repo/imagename>:<tag> .``
+- ``docker run --rm -d -p 8080:80 --name <name> <repo/imagename>:<tag>``
 
 ### Deploy
 
-See build-deploy.sh
+See pipelines ``yaml`` files.
 
 - Build and Pushes docker images
-- Generates Helm charts and pushes to kubernetes
+- Generates Helm charts and pushes to AKS
