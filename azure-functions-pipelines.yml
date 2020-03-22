@@ -23,12 +23,11 @@ stages:
           publishWebProjects: false
           projects: '**/*.csproj'
           arguments: '--output $(Build.ArtifactStagingDirectory) --configuration Release'
-
-      - task: PublishBuildArtifacts@1
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish Function'
         inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
+          targetPath: '$(Build.ArtifactStagingDirectory)'
+          artifact: 'drop'
 
 - stage: Deploy
   displayName: 'Deploy'
@@ -52,4 +51,4 @@ stages:
               azureSubscription: 'Visual Studio Enterprise – MPN'
               appType: 'functionApp'
               WebAppName: 'V1-JoaoGoncalves-SignalR-Functions'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+              packageForLinux: '$(Pipeline.Workspace)/*.zip'
