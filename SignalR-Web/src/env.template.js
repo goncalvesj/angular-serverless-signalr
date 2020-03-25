@@ -2,5 +2,5 @@
   window.env = window.env || {};
 
   // Environment variables
-  window['env']['apiUrl'] = 'http://localhost:7071/api';
+  window['env']['apiUrl'] = '${API_URL}';
 })(this);
