@@ -16,14 +16,14 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          # - task: Docker@2
-          #   displayName: 'Docker Build'
-          #   inputs:
-          #     containerRegistry: 'Docker Hub - Goncalvesj'
-          #     repository: 'goncalvesj/signalr-web'
-          #     command: build
-          #     Dockerfile: '**/Dockerfile'
-          #     tags: $(Build.BuildNumber)
+          - task: Docker@2
+            displayName: 'Docker Build'
+            inputs:
+              containerRegistry: 'Docker Hub - Goncalvesj'
+              repository: 'goncalvesj/signalr-web'
+              command: build
+              Dockerfile: '**/Dockerfile'
+              tags: $(Build.BuildNumber)
           - task: PublishPipelineArtifact@1
             displayName: 'Publish Charts'
             inputs:
@@ -32,7 +32,7 @@ stages:
 
   - stage: Deploy
     displayName: 'Deploy'
-    # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
       - deployment: Deploy
         displayName: 'Deploy'
