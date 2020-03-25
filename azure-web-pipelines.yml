@@ -30,20 +30,6 @@ stages:
             Dockerfile: '**/Dockerfile'
             tags: $(Build.BuildNumber)
 
-        - task: Docker@2
-          displayName: 'Docker Push'
-          inputs:
-            containerRegistry: 'Docker Hub - Goncalvesj'
-            repository: 'goncalvesj/signalr-web'
-            command: push
-            Dockerfile: '**/Dockerfile'
-            tags: $(Build.BuildNumber)
-      # - task: Docker@1
-      #   displayName: 'Build an image'
-      #   inputs:
-      #     azureSubscriptionEndpoint: $(AzureSubscription)
-      #     azureContainerRegistry: $(ContainerRegistry)
-      #     imageName: 'goncalvesj/signalr-web:$(Build.BuildId)'
         - task: PublishPipelineArtifact@1
           displayName: 'Publish Charts'
           inputs:
@@ -52,13 +38,13 @@ stages:
 
 - stage: Deploy
   displayName: 'Deploy'
+  # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: Deploy
     displayName: 'Deploy'
     pool:
       vmImage: 'ubuntu-latest'
     environment: 'V1-JoaoGoncalves-AKS'
-
     strategy:      
       runOnce:
         deploy:
@@ -77,6 +63,14 @@ stages:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
               command: 'login'
+          - task: Docker@2
+            displayName: 'Docker Build'
+            inputs:
+              containerRegistry: 'Docker Hub - Goncalvesj'
+              repository: 'goncalvesj/signalr-web'
+              command: buildAndPush
+              Dockerfile: '**/Dockerfile'
+              tags: $(Build.BuildNumber)
           - task: Bash@3
             displayName: 'Helm Package and Upgrade'
             inputs:

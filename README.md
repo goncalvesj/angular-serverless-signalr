@@ -1,17 +1,17 @@
 # Angular + Serverless SignalR using Azure Functions
 
-Simple chat app using an angular 8 app with azure signalr service and azure functions.
+Simple chat app using an angular 8 app with azure ``signalr`` service and azure functions.
 
-DEMO: https://angular-signalr.jpcloud.tk/
+DEMO: <https://angular-signalr.jpcloud.tk/>
 
 ## Azure Functions
 
 Contains 2 functions
 
-- Negotiate (initiates the signalr connection)
+- Negotiate (initiates the ``signalr`` connection)
 - Send Message (sends message to an user)
 
-Create local.settings.json file with the below settings and start the function.
+Create ``local.settings.json`` file with the below settings and start the function.
 
 ```JSON
 {
