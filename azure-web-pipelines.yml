@@ -21,14 +21,14 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-        - task: Docker@2
-          displayName: 'Docker Build'
-          inputs:
-            containerRegistry: 'Docker Hub - Goncalvesj'
-            repository: 'goncalvesj/signalr-web'
-            command: build
-            Dockerfile: '**/Dockerfile'
-            tags: $(Build.BuildNumber)
+        # - task: Docker@2
+        #   displayName: 'Docker Build'
+        #   inputs:
+        #     containerRegistry: 'Docker Hub - Goncalvesj'
+        #     repository: 'goncalvesj/signalr-web'
+        #     command: build
+        #     Dockerfile: '**/Dockerfile'
+        #     tags: $(Build.BuildNumber)
 
         - task: PublishPipelineArtifact@1
           displayName: 'Publish Charts'
@@ -51,10 +51,14 @@ stages:
           steps:
           - checkout: self
             clean: boolean
-          # - task: DownloadPipelineArtifact@2
-          #   displayName: 'Download Pipeline Artifact'
-          #   inputs:
-          #     artifactName: charts
+          - task: Docker@2
+            displayName: 'Docker Build'
+            inputs:
+              containerRegistry: 'Docker Hub - Goncalvesj'
+              repository: 'goncalvesj/signalr-web'
+              command: buildAndPush
+              Dockerfile: '**/Dockerfile'
+              tags: $(Build.BuildNumber)
           - task: HelmInstaller@1
             displayName: 'Install Helm'
             inputs:
@@ -65,14 +69,6 @@ stages:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
               command: 'login'
-          - task: Docker@2
-            displayName: 'Docker Build'
-            inputs:
-              containerRegistry: 'Docker Hub - Goncalvesj'
-              repository: 'goncalvesj/signalr-web'
-              command: buildAndPush
-              Dockerfile: '**/Dockerfile'
-              tags: $(Build.BuildNumber)
           - task: Bash@3
             displayName: 'Helm Package and Upgrade'
             inputs:

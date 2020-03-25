@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { EnvService } from './services/env.service';
 import { MessageObject } from './model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,11 @@ export class AppComponent {
 
   messages = new Array<MessageObject>();
 
-  constructor(private envService: EnvService, private http: HttpClient) {}
+  constructor(
+    private envService: EnvService,
+    private http: HttpClient,
+    private snackBar: MatSnackBar
+  ) {}
 
   startChat() {
     const connection = new HubConnectionBuilder()
@@ -27,7 +32,30 @@ export class AppComponent {
       .configureLogging(LogLevel.Information)
       .build();
 
-    connection.start().then(() => (this.status = 'connected.'));
+    this.snackBar.open('Starting connection...', '', {
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      duration: 5000
+    });
+
+    connection.start().then(
+      () => {
+        this.snackBar.open('Connected!', '', {
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+        this.status = 'connected.';
+      },
+      () => {
+        this.snackBar.open('Error!', '', {
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          duration: 5000
+        });
+        this.status = 'error occurred.';
+      }
+    );
 
     connection.on('ReceiveMessage', (data: MessageObject) => {
       this.messages.push(data);
