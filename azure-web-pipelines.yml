@@ -49,10 +49,12 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              artifactName: charts
+          - checkout: self
+            clean: boolean
+          # - task: DownloadPipelineArtifact@2
+          #   displayName: 'Download Pipeline Artifact'
+          #   inputs:
+          #     artifactName: charts
           - task: HelmInstaller@1
             displayName: 'Install Helm'
             inputs:
