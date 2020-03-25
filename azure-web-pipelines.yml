@@ -58,8 +58,8 @@ stages:
                     script: |
                       ls -R
                       export API_URL="https://v1-joaogoncalves-signalr-functions.azurewebsites.net/api";
-                      envsubst < env.template.js > env.js
-                      cat env.js
+                      envsubst < ./s/SignalR-Web/src/env.template.js > ./s/SignalR-Web/src/env.js
+                      cat ./s/SignalR-Web/src/env.js
                     workingDirectory: $(Pipeline.Workspace)
                 # - task: Docker@2
                 #   displayName: 'Docker Build'
