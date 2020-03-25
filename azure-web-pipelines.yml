@@ -62,7 +62,7 @@ stages:
           - task: HelmInstaller@1
             displayName: 'Install Helm'
             inputs:
-              helmVersionToInstall: 'latest'
+              helmVersionToInstall: 3.1.0
           - task: Kubernetes@1
             displayName: 'AKS Login'
             inputs:
