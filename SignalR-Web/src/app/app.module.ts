@@ -7,8 +7,6 @@ import { AppMaterialModule } from './app-material.module';
 
 import { AppComponent } from './app.component';
 
-import { EnvServiceProvider } from './services/env.service.provider';
-
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -18,7 +16,7 @@ import { EnvServiceProvider } from './services/env.service.provider';
     HttpClientModule,
     FormsModule
   ],
-  providers: [EnvServiceProvider],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

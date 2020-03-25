@@ -7,11 +7,6 @@ trigger:
       - SignalR-Web/*
       - azure-web-pipelines.yml
 
-variables:
-  subscription: 'Visual Studio Enterprise – MPN'
-  resourceGroup: 'V1-JoaoGoncalves-AKS'
-  kubernetesCluster: 'V1-JoaoGoncalves-AKS'
-
 stages:
   - stage: Build
     displayName: 'Build'
@@ -29,7 +24,6 @@ stages:
           #     command: build
           #     Dockerfile: '**/Dockerfile'
           #     tags: $(Build.BuildNumber)
-
           - task: PublishPipelineArtifact@1
             displayName: 'Publish Charts'
             inputs:
@@ -56,36 +50,34 @@ stages:
                   inputs:
                     targetType: 'inline'
                     script: |
-                      ls -R
                       export API_URL="https://v1-joaogoncalves-signalr-functions.azurewebsites.net/api";
                       envsubst < ./s/SignalR-Web/src/env.template.js > ./s/SignalR-Web/src/env.js
-                      cat ./s/SignalR-Web/src/env.js
                     workingDirectory: $(Pipeline.Workspace)
-                # - task: Docker@2
-                #   displayName: 'Docker Build'
-                #   inputs:
-                #     containerRegistry: 'Docker Hub - Goncalvesj'
-                #     repository: 'goncalvesj/signalr-web'
-                #     command: buildAndPush
-                #     Dockerfile: '**/Dockerfile'
-                #     tags: $(Build.BuildNumber)
-                # - task: HelmInstaller@1
-                #   displayName: 'Install Helm'
-                #   inputs:
-                #     helmVersionToInstall: 3.1.0
-                # - task: Kubernetes@1
-                #   displayName: 'AKS Login'
-                #   inputs:
-                #     connectionType: 'Kubernetes Service Connection'
-                #     kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
-                #     command: 'login'
-                # - task: Bash@3
-                #   displayName: 'Helm Package and Upgrade'
-                #   inputs:
-                #     targetType: 'inline'
-                #     script: |
-                #       helm package ./charts --app-version $(Build.BuildNumber)
-                #       helmReleaseName="sw-0"
-                #       packageFile=$(find . -name "*.tgz")
-                #       helm upgrade $helmReleaseName $packageFile
-                #     workingDirectory: $(Pipeline.Workspace)
+                - task: Docker@2
+                  displayName: 'Docker Build'
+                  inputs:
+                    containerRegistry: 'Docker Hub - Goncalvesj'
+                    repository: 'goncalvesj/signalr-web'
+                    command: buildAndPush
+                    Dockerfile: '**/Dockerfile'
+                    tags: $(Build.BuildNumber)
+                - task: HelmInstaller@1
+                  displayName: 'Install Helm'
+                  inputs:
+                    helmVersionToInstall: 3.1.0
+                - task: Kubernetes@1
+                  displayName: 'AKS Login'
+                  inputs:
+                    connectionType: 'Kubernetes Service Connection'
+                    kubernetesServiceEndpoint: 'V1-JoaoGoncalves-AKS-V1-JoaoGoncalves-AKS-default-1583626081772'
+                    command: 'login'
+                - task: Bash@3
+                  displayName: 'Helm Package and Upgrade'
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      helm package ./charts --app-version $(Build.BuildNumber)
+                      helmReleaseName="sw-0"
+                      packageFile=$(find . -name "*.tgz")
+                      helm upgrade $helmReleaseName $packageFile
+                    workingDirectory: $(Pipeline.Workspace)

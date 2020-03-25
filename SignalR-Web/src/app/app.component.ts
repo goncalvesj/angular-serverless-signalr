@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { EnvService } from './services/env.service';
 import { MessageObject } from './model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -21,14 +21,13 @@ export class AppComponent {
   messages = new Array<MessageObject>();
 
   constructor(
-    private envService: EnvService,
     private http: HttpClient,
     private snackBar: MatSnackBar
   ) {}
 
   startChat() {
     const connection = new HubConnectionBuilder()
-      .withUrl(`${this.envService.signalrUrl}?oid=${this.userName}`)
+      .withUrl(`${environment.apiUrl}?oid=${this.userName}`)
       .configureLogging(LogLevel.Information)
       .build();
 
@@ -64,7 +63,7 @@ export class AppComponent {
 
   sendMessage() {
     this.http
-      .post(`${this.envService.signalrUrl}/SendMessage`, {
+      .post(`${environment.apiUrl}/SendMessage`, {
         text: this.message,
         userId: this.toUser
       })
