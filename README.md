@@ -1,3 +1,5 @@
+# ARCHIVED: Moved to <https://github.com/goncalvesj/application-templates>
+
 # Angular + Serverless SignalR using Azure Functions
 
 Simple chat app using an angular 8 app with azure ``signalr`` service and azure functions.
